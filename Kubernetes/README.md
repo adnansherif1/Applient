@@ -13,9 +13,9 @@ This file contians the service and deployment corresponding to the web server mi
 It uses the adnans22/applient-server:v1 image <br>
 Note that the environment variable model is set to applient-model. This resolves to the DNS of the model service from the model deployment.<br>
 Run the following command to deploy the model<br>
-kubectl apply -f applient-server.yml<br>
+<b>kubectl apply -f applient-server.yml </b><br>
 
 
 To expose the server service to the internet run:<br>
-kubectl port-forward service/applient-server 3000:5000 --address 0.0.0.0<br>
-Note this is a bad practice (Next step is to setup the nginx ingress controller and an AWS elastic loadbalancer to receive requests)<br>
+<b>kubectl port-forward service/applient-server 3000:5000 --address 0.0.0.0</b><br>
+<b>Note this is a bad practice (Next step is to setup the nginx ingress controller and an AWS elastic loadbalancer to receive requests)</b><br>
