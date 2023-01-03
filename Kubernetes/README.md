@@ -6,7 +6,7 @@ with Kops and edit the cluster configurations as required<br>
 This file contains the deployment and service associated with the ML model microservice.<br>
 It uses the adnans22/applient_model:latest image <br>
 Run the following command to deploy the model<br>
-kubectl apply -f applient-model.yml<br>
+<b> kubectl apply -f applient-model.yml </b> <br>
 
 # applient-server.yml
 This file contians the service and deployment corresponding to the web server microservice<br>
