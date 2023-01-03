@@ -1,0 +1,85 @@
+
+# Create IAM group, add user, and create ssh keys <br>
+	Create an EC2 instance <br>
+	Acquire Access Keys <br>
+		In the Ec2 console under my security credentials click access key <br>
+		create new acess key <br>
+	Install Aws cli on the ec2 instance "https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html" <br>
+
+	Create an IAM Group with access to EC2,S3,VPC,IAM
+		create IAM Group
+		aws iam create-group --group-name applient
+		Provide necessary access
+		aws iam attach-group-policy \
+    		--policy-arn arn:aws:iam::aws:policy/AmazonEC2FullAccess \
+    		--group-name applient
+
+		aws iam attach-group-policy \
+    		--policy-arn arn:aws:iam::aws:policy/AmazonS3FullAccess \
+    		--group-name applient
+
+		aws iam attach-group-policy \
+		    --policy-arn arn:aws:iam::aws:policy/AmazonVPCFullAccess \
+		    --group-name applient
+
+		aws iam attach-group-policy \
+		    --policy-arn arn:aws:iam::aws:policy/IAMFullAccess \
+		    --group-name applient
+		Create user
+		aws iam create-user --user-name applient
+
+		add user to the applient group
+		aws iam add-user-to-group \
+		    --user-name kops \
+		    --group-name kops
+		create user access key 
+		aws iam create-access-key \
+    		--user-name kops >kops-creds
+
+	Create ssh Keys:
+		aws ec2 create-key-pair --key-name devops
+		copy Key material to devops.pem file 
+		chmod 400 devops.pem
+		acquire public segment of the key and write to devops.pub
+		ssh-keygen -y -f devops23.pem \
+    		>devops23.pub
+   	Add the following to the ~/.bash_profile <br>
+		export AWS_DEFAULT_REGION=us-east-2 <br>
+		export AWS_ACCESS_KEY_ID= "access key from previous step"<br>
+		export AWS_SECRET_ACCESS_KEY= "access secret from previous step"<br>
+		export ZONES=us-east-2a
+		export NAME=applient.k8s.local
+		export BUCKET_NAME= devops
+
+#Create S3 bucket
+	aws s3api create-bucket \
+	    --bucket $BUCKET_NAME \
+	    --create-bucket-configuration \
+	    LocationConstraint=$AWS_DEFAULT_REGION
+	One more export to ~/.bash_profile
+		export KOPS_STATE_STORE=s3://$BUCKET_NAME
+
+
+#Installing kubectl and kops 
+	wget -O kops https://github.com/kubernetes/kops/releases/download/$(curl -s https://api.github.com/repos/kubernetes/kops/releases/latest | grep tag_name | cut -d '"' -f 4)/kops-linux-amd64
+
+	chmod +x ./kops
+
+	sudo mv ./kops /usr/local/bin/
+
+#Setting up the cluster 
+	Create a cluster with one master node, 2 worker nodes of sizes t2.small in the us-east-2a region <br>
+
+	kops create cluster --name=$NAME --zones=us-east-2a  --node-count=1 --ssh-public-key devops23.pub --networking kubenet --master-size t2.small --node-size t2.small --yes
+
+	Wait until cluster is created
+	kops validate cluster
+
+#edit the cluster 
+	Edit the instance groups (example: kinds and number of nodes)
+	kops edit ig --name $NAME nodes
+	Apply the changes 
+	kops update cluster --name $NAME --yes
+
+# Next steps: Nginx ingress conteoller and load balancer "https://docs.nginx.com/nginx-ingress-controller/installation/installation-with-manifests/"
+

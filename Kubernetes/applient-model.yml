@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment        
+metadata:       
+  name: applient-model    
+spec:   
+  selector:     
+    matchLabels:        
+      type:  model  
+      service: applient        
+  strategy:     
+    type: Recreate      
+  template:     
+    metadata:   
+      labels:   
+        type: model        
+        service: applient       
+    spec:       
+      containers:       
+      - name: model        
+        image: adnans22/applient_model:latest        
+        resources:      
+          requests:     
+            memory: "100Mi"      
+            cpu: 0.1   
+
+---     
+
+apiVersion: v1  
+kind: Service   
+metadata:       
+  name: applient-model    
+spec:   
+  ports:        
+  - port: 3000 
+  selector:     
+    type: model    
+    service: applient
