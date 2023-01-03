@@ -13,5 +13,5 @@ The image is hosted at adnans22/applient-server:v1 on Docker hub <br>
 Run the container as follows: <br>
 docker run --rm -p 5000:5000 -e model=applient-model adnans22/applient_model:latest <br>
 The container listens on port 5000 <br>
-environment vavriable model should be replaced with the domain name or the IP address of the model server. In the Kubernetes cluster applient-model <br>
-resolves to the DNS of the service corresponding to the model deployment. <br>
+Environment vavriable model should be replaced with the domain name or the IP address of the model server. In the Kubernetes cluster applient-model 
+resolves to the DNS of the service corresponding to the model deployment. 
