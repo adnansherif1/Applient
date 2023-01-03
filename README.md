@@ -14,7 +14,8 @@ Youtube product demonstration: https://www.youtube.com/watch?v=CJtjjkdpU5M&t=79s
 Docker folder contains two Dockerfiles corresponding to the web server and Ml model microservices. The corresponding images 
 adnans22/applient-model:latest and adnans22/applient-server are publicly available on Docker hub
 
-# Kubernetes cluster setup instructions are found in Kubernetes/CLUSTER_SETUP_INSTRUCTIONS.txt. The folder also contains the deployment and service files 
+# Kubernetes 
+cluster setup instructions are found in Kubernetes/CLUSTER_SETUP_INSTRUCTIONS.txt. The folder also contains the deployment and service files 
 for the server and the model. It also contains instructions on deploying the application in the Aws Kubernetes cluster.
 
 
